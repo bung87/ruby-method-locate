@@ -1,5 +1,5 @@
 {
-    "name": "ruby-method-locate",
+    "name": "ruby-parser",
     "version": "0.0.5",
     "description": "Finds position of ruby methods/modules/classes in a file. Intended for use in code editors.",
     "keywords": [
@@ -13,7 +13,10 @@
         "email": "hooky@qrmaster.co.nz",
         "url": "http://qrmaster.co.nz"
     },
-    "repository": "HookyQR/ruby-method-locate",
+    "repository": {
+        "type":"git",
+        "url": "https://github.com/bung87/ruby-parser"
+    },
     "license": "MIT",
     "devDependencies": {
         "mocha": "^2.5.3",

@@ -1,6 +1,6 @@
 'use strict';
 let expect = require('chai').expect;
-let parse = require('../lib/parse');
+let parser = require('../lib/parse');
 
 const util = require('util');
 describe('parse', function() {
@@ -12,7 +12,7 @@ def こんにちは
 end
 def other!
 end`;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
 
             expect(result.method).to.have.property('fn');
             expect(result.method).to.have.property('こんにちは');
@@ -28,7 +28,7 @@ class Other
   def test
   end
 end`;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
 
             expect(result.class).to.have.property('Class');
             expect(result.class).to.have.property('Other');
@@ -47,7 +47,7 @@ end# with a comment
 def other!
   "an escaped quote \\" with an end"
 end`;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
 
             expect(result.method).to.have.property('fn');
             expect(result.method).to.have.property('other!');
@@ -60,7 +60,7 @@ class Other
   def test
   end# with a comment
 end`;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
 
             expect(result.class).to.have.property('Class');
             expect(result.class).to.have.property('Other');
@@ -69,7 +69,7 @@ end`;
     });
     context('with blocks', function() {
         function check(contextString) {
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
 
             expect(result.method.fn).to.eql({
                 posn: 5
@@ -233,7 +233,7 @@ module Module
   end
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.module).to.have.property('Module');
             expect(result.module.Module.class).to.have.property('Class');
             expect(result.module.Module.class.Class.method).to.have.property('initialize');
@@ -256,7 +256,7 @@ module Module
   end
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.module).to.have.property('Module');
             expect(result.module.Module.class).to.have.property('Class');
             expect(result.module.Module.class.Class.method).to.have.property('initialize');
@@ -281,7 +281,7 @@ module Module
   end
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.module).to.have.property('Module');
             expect(result.module.Module.class).to.have.property('Class');
             expect(result.module.Module.class.Class.method).to.have.property('initialize');
@@ -305,7 +305,7 @@ module Module::First
   end
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.module).to.have.property('Module');
             expect(result.module.Module.module).to.have.property('First');
             expect(result.module.Module.module.First.module).to.have.property('Second');
@@ -322,7 +322,7 @@ class Class
   include Other, OtherTwo
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.class).to.have.property('Class');
             expect(result.class.Class.include).to.include('Other');
             expect(result.class.Class.include).to.include('OtherTwo');
@@ -332,7 +332,7 @@ end
 class Class < Other
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.class).to.have.property('Class');
             expect(result.class.Class.inherit).to.eql('Other');
         });
@@ -345,7 +345,7 @@ class Class
   alias_method :m3, :m1
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.class.Class.method).to.have.property('m2');
             expect(result.class.Class.method).to.have.property('m3');
         });
@@ -356,7 +356,7 @@ class Class
   alias :m3 :m1
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.class.Class.method).to.have.property('m2');
             expect(result.class.Class.method).to.have.property('m3');
         });
@@ -367,7 +367,7 @@ class Class
   alias $m3 $m4
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.class.Class.method).to.be.an('undefined');
         });
     });
@@ -386,7 +386,7 @@ end
 def fn2
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.method).to.have.property('fn');
             expect(result.method).to.have.property('fn2');
             expect(result.method).not.to.have.property('other');
@@ -404,7 +404,7 @@ end
 def fn2
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.method).to.have.property('fn');
             expect(result.method).to.have.property('fn2');
             expect(result.method).not.to.have.property('other');
@@ -422,7 +422,7 @@ end
 def fn2
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.method).to.have.property('fn');
             expect(result.method).to.have.property('fn2');
             expect(result.method).not.to.have.property('other');
@@ -440,7 +440,7 @@ end
 def fn2
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.method).to.have.property('fn');
             expect(result.method).to.have.property('fn2');
             expect(result.method).not.to.have.property('other');
@@ -458,7 +458,7 @@ end
 def fn2
 end
 `;
-            const result = parse(contextString);
+            const result = parser.parseFile(contextString);
             expect(result.method).to.have.property('fn');
             expect(result.method).to.have.property('fn2');
             expect(result.method).not.to.have.property('other');

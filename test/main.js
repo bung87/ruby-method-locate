@@ -3,13 +3,13 @@ const fs = require('fs');
 const path = require('path');
 
 let expect = require('chai').expect;
-let parse = require('../main');
+let parser = require('../main');
 
 describe('parse - main', function() {
     context('file parsing', function() {
         it('finds methods', function() {
             const filename = path.join(__dirname, 'sample', 'basic.rb');
-            return parse(filename).then(result => {
+            return parser.parseFile(filename).then(result => {
                 expect(result).to.eql({
                     module: {
                         Module: {
@@ -47,7 +47,7 @@ describe('parse - main', function() {
 
         it('fails for a non existant file', function() {
             const filename = path.join(__dirname, 'sample', 'this is not a file');
-            return parse(filename)
+            return parser.parseFile(filename)
                 .then(result => {
                     throw result;
                 }, err => expect(err).to.exist);

@@ -1,12 +1,11 @@
-# ruby-method-locate
-[![Build Status](https://travis-ci.org/HookyQR/ruby-method-locate.svg?branch=master)](https://travis-ci.org/HookyQR/ruby-method-locate)
+# ruby-parser
 
 Finds position of ruby methods/modules/classes in a file. Intended for use in code editors.
 
 ```javascript
-const rubyLocate = require('ruby-method-locate');
+const parser = require('ruby-parser');
 
-rubyLocate('./main.rb').then(result => {
+parser.parseFile('./main.rb').then(result => {
   // ...
 }).catch( failure => {
   // some file access error
